@@ -18,7 +18,7 @@ export class MealPassOutlet extends BaseEntity {
   @Column()
   city: string;
 
-  @Column({ type: 'number' })
+  @Column()
   pincode: number;
 
   @Column()
@@ -27,6 +27,6 @@ export class MealPassOutlet extends BaseEntity {
   @Column()
   new_category: string;
 
-  @Column({ type: 'boolean', nullable: false })
+  @Column({ type: 'boolean' })
   enable_with_bqr_code: boolean;
 }

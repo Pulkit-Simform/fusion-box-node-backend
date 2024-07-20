@@ -7,7 +7,6 @@ export class OnlineMerchant extends BaseEntity {
   brand_name: string;
 
   @Column({
-    type: 'string',
     comment: 'comma separated city values or single value',
   })
   available_at: string;
