@@ -25,7 +25,7 @@ export class AuthController {
     res: Response,
   ): Promise<ResponseCookieToken> {
     res.cookie('jwt', data.token);
-    return { access_token: data.token };
+    return { data: { access_token: data.token } };
   }
 
   @ApiOperation({ summary: 'Register user' })

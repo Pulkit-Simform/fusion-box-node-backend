@@ -11,6 +11,7 @@ import { ClientAuthGuard } from './core/guards/auth.guard';
 import { SkillModule } from './modules/skill/skill.module';
 import { ProjectModule } from './modules/project/project.module';
 import { LangChainModule } from './modules/langchain/langchain.module';
+import { EventsModule } from './modules/events/events.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { LangChainModule } from './modules/langchain/langchain.module';
       }),
       inject: [ConfigService],
     }),
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [

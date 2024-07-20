@@ -1,16 +1,13 @@
 import {
-  BaseEntity,
   Column,
   Entity,
   ManyToMany,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
+import { BaseEntity } from './base.entity';
 
-@Entity('Project')
+@Entity('project')
 export class Project extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
 
   @Column()
   title: string;

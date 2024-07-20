@@ -28,3 +28,16 @@ export const statusMessages = {
   206: 'PartialContent',
 };
  
+
+export const HOLIDAYS = [
+  {
+    date: "02-12-2024",
+    title: "Holiday 1",
+    type: "REGULAR"
+  },
+  {
+    date: "05-02-2024",
+    title: "Holiday 2",
+    type: "FLOATER"
+  }
+]

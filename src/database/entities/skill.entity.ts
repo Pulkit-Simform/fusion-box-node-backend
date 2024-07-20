@@ -1,12 +1,11 @@
 import {
-  BaseEntity,
   Column,
   Entity,
   ManyToOne,
   OneToOne,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
+import { BaseEntity } from './base.entity';
 
 export enum ELevel {
   BEGINNER = 'BEGINNER',
@@ -27,8 +26,6 @@ export enum EType {
 
 @Entity('skill')
 export class Skill extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
 
   @Column({
     type: 'enum',
