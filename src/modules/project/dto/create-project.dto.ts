@@ -1,4 +1,4 @@
-import { IsDate, IsNotEmpty, IsNumber, IsString, Max, Min } from "class-validator";
+import { IsArray, IsDate, IsInt, IsNotEmpty, IsNumber, IsString, Max, Min } from "class-validator";
 
 export class CreateProjectDto {
 
@@ -14,9 +14,10 @@ export class CreateProjectDto {
     @IsNotEmpty()
     status: string;
 
-    @IsNumber()
+    @IsArray()
     @IsNotEmpty()
-    users: number;
+    @IsInt({ each: true })
+    users: number[];
 
     @IsDate()
     @IsNotEmpty()

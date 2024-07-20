@@ -1,4 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './user.entity';
 
 export enum ELevel {
   BEGINNER = 'BEGINNER',
@@ -12,25 +20,25 @@ export enum EStatus {
   REJECTED = 'REJECTED',
 }
 
-export enum  EType {
-   PRIMARY = "PRIMARY",
-   SECONDARY = "SECONDARY" 
+export enum EType {
+  PRIMARY = 'PRIMARY',
+  SECONDARY = 'SECONDARY',
 }
 
 @Entity('skill')
-export class Skill  extends BaseEntity {
+export class Skill extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: EType,
     default: EType.PRIMARY,
   })
   stype: string;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   category: string;
 
@@ -51,19 +59,15 @@ export class Skill  extends BaseEntity {
   })
   status: string;
 
-  @Column({
-    nullable: true,
-  })
-  user: number;
+  @ManyToOne(() => User, (user) => user.skills)
+  user: User;
 
-  @Column({
-    nullable: true,
-  })
+  @Column()
+  @OneToOne(() => User, { nullable: true })
   approvedBy: number;
 
-  @Column({
-    nullable: true,
-  })
+  @Column()
+  @OneToOne(() => User, { nullable: true })
   rejectedBy: number;
 
   @Column({
