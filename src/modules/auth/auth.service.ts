@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { sign } from 'jsonwebtoken';
 import { LoginUserDto } from './dto';
 
-interface JWTPayload {
+export interface JWTPayload {
   id: number;
   email: string;
 }
