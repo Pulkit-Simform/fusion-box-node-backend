@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity } from 'typeorm';
 
 @Entity('meal_pass_outlet')
-export class Project extends BaseEntity {
+export class MealPassOutlet extends BaseEntity {
   @Column({ nullable: false })
   outlet_name: string;
 

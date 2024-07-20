@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity } from 'typeorm';
 
 @Entity('online_merchant')
-export class Project extends BaseEntity {
+export class OnlineMerchant extends BaseEntity {
   @Column({ nullable: false })
   brand_name: string;
 
