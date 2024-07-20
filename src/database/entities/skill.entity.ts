@@ -17,6 +17,9 @@ export class Skill {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  category: string;
+
   @Column({
     type: 'enum',
     enum: ELevel,

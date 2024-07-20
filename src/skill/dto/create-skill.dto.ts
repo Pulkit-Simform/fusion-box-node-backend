@@ -13,6 +13,13 @@ export class CreateSkillDto {
   @ApiProperty({
     type: String,
   })
+  @IsString()
+  @IsNotEmpty()
+  category: string;
+
+  @ApiProperty({
+    type: String,
+  })
   @IsEnum(ELevel)
   @IsNotEmpty()
   level: ELevel;
