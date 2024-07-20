@@ -13,7 +13,6 @@ import {
 import { SkillService } from './skill.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
-import { response } from 'express';
 import { Public } from 'src/core/decorators/public.decorator';
 
 @Controller('skill')
@@ -24,11 +23,11 @@ export class SkillController {
   async create(@Body() createSkillDto: CreateSkillDto) {
     const skill = await this.skillService.create(createSkillDto);
     return {
-      message:"skill has been created Successfully!",
-      data:{
-        skill
-      }
-    }
+      message: 'skill has been created Successfully!',
+      data: {
+        skill,
+      },
+    };
   }
 
   @Get()
@@ -39,7 +38,7 @@ export class SkillController {
     return {
       message: 'skills',
       data: {
-        skills
+        skills,
       },
     };
   }
@@ -54,7 +53,7 @@ export class SkillController {
     return {
       message: 'skills',
       data: {
-        skill
+        skill,
       },
     };
   }
@@ -68,7 +67,7 @@ export class SkillController {
     return {
       message: 'skills updated',
       data: {
-        skill
+        skill,
       },
     };
   }
