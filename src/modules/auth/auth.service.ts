@@ -34,7 +34,10 @@ export class AuthService {
   }
 
   async register(user: CreateUserDto): Promise<ResponseUserDto> {
-    if (await this.userService.getUsersByEmail(user.email))
+    if (await this.userService.getUserByEmail(user.email))
+      throw new BadRequestException('User already registered');
+
+    if (await this.userService.getUserByPhoneNumber(user.phone_number))
       throw new BadRequestException('User already registered');
 
     // if not then hash the password
@@ -55,7 +58,7 @@ export class AuthService {
   }
 
   async login(user: LoginUserDto): Promise<ResponseUserDto> {
-    const availableUser = await this.userService.getUsersByEmail(user.email);
+    const availableUser = await this.userService.getUserByEmail(user.email);
 
     if (!availableUser)
       throw new BadRequestException('User email or password is not correct');
