@@ -4,6 +4,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Tags, apiVersion } from './common/constant';
 import { Public } from './core/decorators/public.decorator';
 import { ClientAuthGuard } from './core/guards/auth.guard';
+import { CurrentUser } from './core/decorators/user.decorator';
 
 @ApiTags(Tags.HEALTH)
 @Controller({ version: apiVersion, path: 'healthCheck' })
@@ -18,8 +19,10 @@ export class AppController {
   }
 
   @Get("/guard")
-  @UseGuards(ClientAuthGuard)
-  checkWithGuard(){
+  @UseGuards(ClientAuthGuard)  
+  checkWithGuard(@CurrentUser() user){
+    console.log("🚀 ~ AppController ~ checkWithGuard ~ user:", user)
+    
     return "Checking guard";
   }
 }

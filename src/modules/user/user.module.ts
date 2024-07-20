@@ -5,9 +5,11 @@ import { User } from '../../database/entities';
 import { DatabaseModule } from '../../database/database.module';
 import { DATA_SOURCE } from '../../common/constant';
 import { DataSource } from 'typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule,ConfigModule,JwtModule],
   controllers: [UserController],
   providers: [
     UserService,
