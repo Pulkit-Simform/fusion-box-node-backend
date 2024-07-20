@@ -8,12 +8,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ClientAuthGuard } from './core/guards/auth.guard';
+import { SkillModule } from './modules/skill/skill.module';
+import { ProjectModule } from './modules/project/project.module';
 
 @Module({
   imports: [
     DatabaseModule,
     AuthModule,
-    UserModule,
+     UserModule, SkillModule, ProjectModule,
     ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
