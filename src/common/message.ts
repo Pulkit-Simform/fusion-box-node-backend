@@ -10,6 +10,13 @@ export const message = {
     },
     FORBIDDEN: 'error.FORBIDDEN',
   },
+  ERROR: {
+    AUTH: {
+      TOKEN_NOT_FOUND: 'Token not found!',
+      TOKEN_EXPIRED: 'Invalidate token, Token may expired!',
+      SESSION_EXPIRED: 'Session has expired, please login',
+    },
+  },
   VALIDATION: {
     NOT_EMPTY: (key: string) =>
       `error.VALIDATION.NOT_EMPTY|{"args":{"key":"${key}"}}`,

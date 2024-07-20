@@ -6,7 +6,7 @@ const configService = new ConfigService();
 const dbConfig = configService.get('database');
 
 export default new DataSource({
-  name: 'BACKEND',
+  name: 'postgres',
   type: dbConfig.DB_TYPE,
   host: dbConfig.DB_HOST,
   port: +dbConfig.DB_PORT,
@@ -14,7 +14,7 @@ export default new DataSource({
   password: dbConfig.DB_PASSWORD,
   database: dbConfig.DB_NAME,
   synchronize: true,
-  entities: [join(__dirname, '../entities/**/*.{ts,js}')],
+  entities: [join(__dirname, '../entities/*.{ts,js}')],
   migrations: [join(__dirname, '../migrations/**/*.{ts,js}')],
   logging: true,
   migrationsTableName: 'migrations',
