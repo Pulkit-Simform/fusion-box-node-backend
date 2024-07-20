@@ -20,12 +20,10 @@ export class UserController {
   @Get('/profile')
   @HttpCode(HttpStatus.ACCEPTED)
   async register(@CurrentUser() user: User) {
-    const users = await this.userService.getUsersById(user.id);
-
     return {
       message: 'users profile',
       data: {
-        users,
+        user,
       },
     };
   }
