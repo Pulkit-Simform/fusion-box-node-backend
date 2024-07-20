@@ -1,12 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { User } from './../../database/entities';
+import { Skill, User } from './../../database/entities';
 import { In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto';
+import { getSkillsByDepartment } from 'src/common/constant';
 @Injectable()
 export class UserService {
   constructor(
     @Inject('USER') private readonly userRepository: Repository<User>,
+    @Inject('SKILL') private readonly skillRepo: Repository<Skill>,
   ) {}
+
+  async createSkillsForUser(user: User, department: string){
+    const skills = this.skillRepo.create(getSkillsByDepartment(department,user.id));
+    return this.skillRepo.insert(skills);
+  }
 
   async getAllUsers(): Promise<User[]> {
     return await this.userRepository.find();
