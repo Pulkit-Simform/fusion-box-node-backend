@@ -54,6 +54,7 @@ export class ClientAuthGuard implements CanActivate {
         throw new UnauthorizedException('You are not logged in');
       }
 
+      request.user = user;
       return true;
     } catch (e) {
       if (this.configService.get('NODE_ENV') === 'development') {
