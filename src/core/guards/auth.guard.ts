@@ -48,7 +48,6 @@ export class ClientAuthGuard implements CanActivate {
       });
 
       const user = await this.userService.getUsersById(decodedToken.id);
-      
 
       if (!user) {
         throw new UnauthorizedException('You are not logged in');

@@ -10,13 +10,17 @@ import { APP_GUARD } from '@nestjs/core';
 import { ClientAuthGuard } from './core/guards/auth.guard';
 import { SkillModule } from './modules/skill/skill.module';
 import { ProjectModule } from './modules/project/project.module';
+import { LangChainModule } from './modules/langchain/langchain.module';
 
 @Module({
   imports: [
     DatabaseModule,
     AuthModule,
-     UserModule, SkillModule, ProjectModule,
+    UserModule,
+    SkillModule,
+    ProjectModule,
     ConfigModule,
+    LangChainModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
