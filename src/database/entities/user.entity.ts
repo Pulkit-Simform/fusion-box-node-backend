@@ -32,27 +32,27 @@ export class User extends BaseEntity {
   @Column()
   public department: string;
 
-  @Column()
+  @Column({ select: false })
   @Exclude()
   public password: string;
 
-  @OneToMany(() => Skill, skill => skill.user)
+  @OneToMany(() => Skill, (skill) => skill.user)
   skills: Skill[];
 
-  @ManyToMany(
-    () => Project, 
-    project => project.users,
-    {onDelete: 'NO ACTION', onUpdate: 'NO ACTION'})
-    @JoinTable({
-      name: 'user_projects',
-      joinColumn: {
-        name: 'project_id',
-        referencedColumnName: 'id',
-      },
-      inverseJoinColumn: {
-        name: 'user_id',
-        referencedColumnName: 'id',
-      },
-    })
-    projects?: Project[];
+  @ManyToMany(() => Project, (project) => project.users, {
+    onDelete: 'NO ACTION',
+    onUpdate: 'NO ACTION',
+  })
+  @JoinTable({
+    name: 'user_projects',
+    joinColumn: {
+      name: 'project_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+  })
+  projects?: Project[];
 }

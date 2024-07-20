@@ -9,19 +9,28 @@ import {
   HttpStatus,
   HttpCode,
   NotFoundException,
+  ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { SkillService } from './skill.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { Public } from 'src/core/decorators/public.decorator';
+import { CurrentUser } from 'src/core/decorators/user.decorator';
+import { User } from 'src/database/entities';
+import { ClientAuthGuard } from 'src/core/guards/auth.guard';
 
 @Controller('skill')
+@UseGuards(ClientAuthGuard)
 export class SkillController {
   constructor(private readonly skillService: SkillService) {}
 
   @Post()
-  async create(@Body() createSkillDto: CreateSkillDto) {
-    const skill = await this.skillService.create(createSkillDto);
+  async create(
+    @Body(ValidationPipe) createSkillDto: CreateSkillDto,
+    @CurrentUser() user: User,
+  ) {
+    const skill = await this.skillService.create(createSkillDto, user);
     return {
       message: 'skill has been created Successfully!',
       data: {
@@ -32,9 +41,8 @@ export class SkillController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  @Public()
-  async findAll() {
-    const skills = await this.skillService.findAll(0, 10);
+  async findAll(@CurrentUser() user: User) {
+    const skills = await this.skillService.findAll(user);
     return {
       message: 'skills',
       data: {

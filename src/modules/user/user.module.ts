@@ -9,13 +9,13 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [DatabaseModule,ConfigModule,JwtModule],
+  imports: [DatabaseModule, ConfigModule, JwtModule],
   controllers: [UserController],
   providers: [
     UserService,
     {
       inject: [DATA_SOURCE],
-      provide: "USER",
+      provide: 'USER',
       useFactory: (dataSource: DataSource) => dataSource.getRepository(User),
     },
   ],

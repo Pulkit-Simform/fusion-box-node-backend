@@ -1,5 +1,5 @@
 export class ResponseCookieToken {
-  data:{
+  data: {
     access_token: string;
-  }
+  };
 }

@@ -1,14 +1,9 @@
-import {
-  Column,
-  Entity,
-  ManyToMany,
-} from 'typeorm';
+import { Column, Entity, ManyToMany } from 'typeorm';
 import { User } from './user.entity';
 import { BaseEntity } from './base.entity';
 
 @Entity('project')
 export class Project extends BaseEntity {
-
   @Column()
   title: string;
 

@@ -31,12 +31,12 @@ export class Event extends BaseEntity {
   endDate: Date;
 
   @Column({
-    type: "timestamp"
+    type: 'timestamp',
   })
   startTime: Date;
 
   @Column({
-    type: 'timestamp'
+    type: 'timestamp',
   })
   endTime: Date;
 

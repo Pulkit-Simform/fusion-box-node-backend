@@ -8,11 +8,14 @@ import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
   controllers: [EventsController],
-  providers: [EventsService,{
-    inject: [DATA_SOURCE],
-    provide: 'EVENT',
-    useFactory: (dataSource: DataSource) => dataSource.getRepository(Event),
-  },],
-  imports: [DatabaseModule]
+  providers: [
+    EventsService,
+    {
+      inject: [DATA_SOURCE],
+      provide: 'EVENT',
+      useFactory: (dataSource: DataSource) => dataSource.getRepository(Event),
+    },
+  ],
+  imports: [DatabaseModule],
 })
 export class EventsModule {}

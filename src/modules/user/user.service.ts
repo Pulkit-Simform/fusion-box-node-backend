@@ -5,7 +5,7 @@ import { CreateUserDto } from './dto';
 @Injectable()
 export class UserService {
   constructor(
-    @Inject("USER") private readonly userRepository: Repository<User>,
+    @Inject('USER') private readonly userRepository: Repository<User>,
   ) {}
 
   async getAllUsers(): Promise<User[]> {
@@ -18,12 +18,12 @@ export class UserService {
     });
   }
 
-  async getUserByIds(ids: number[]): Promise<User[]>{
+  async getUserByIds(ids: number[]): Promise<User[]> {
     return this.userRepository.find({
       where: {
-        id: In(ids)
-      }
-    })
+        id: In(ids),
+      },
+    });
   }
 
   async getUserByEmail(email: string): Promise<User> {
@@ -31,13 +31,18 @@ export class UserService {
       where: {
         email: email,
       },
+      select: {
+        email: true,
+        password: true,
+        id: true,
+      },
     });
   }
 
   async getUserByPhoneNumber(phoneNumber: string): Promise<User> {
     return await this.userRepository.findOne({
       where: {
-        phone_number:phoneNumber
+        phone_number: phoneNumber,
       },
     });
   }

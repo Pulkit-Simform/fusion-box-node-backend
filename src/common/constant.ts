@@ -17,7 +17,6 @@ export enum ConnectionName {
 
 export const DATA_SOURCE = 'DATA_SOURCE';
 
- 
 export const statusMessages = {
   200: 'OK',
   201: 'Created',
@@ -27,17 +26,16 @@ export const statusMessages = {
   205: 'ResetContent',
   206: 'PartialContent',
 };
- 
 
 export const HOLIDAYS = [
   {
-    date: "02-12-2024",
-    title: "Holiday 1",
-    type: "REGULAR"
+    date: '02-12-2024',
+    title: 'Holiday 1',
+    type: 'REGULAR',
   },
   {
-    date: "05-02-2024",
-    title: "Holiday 2",
-    type: "FLOATER"
-  }
-]
+    date: '05-02-2024',
+    title: 'Holiday 2',
+    type: 'FLOATER',
+  },
+];
