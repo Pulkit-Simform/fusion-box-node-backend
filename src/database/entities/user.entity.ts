@@ -3,6 +3,7 @@ import { BaseEntity } from './base.entity';
 import { Exclude } from 'class-transformer';
 import { Skill } from './skill.entity';
 import { Project } from './project.entity';
+import { DSU } from './dsu.entity';
 
 export enum departmentEnum {
   MEAN_STACK = 'MEAN_STACK',
@@ -38,6 +39,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Skill, (skill) => skill.user)
   skills: Skill[];
+
+  @OneToMany(() => DSU, (dsu) => dsu.user)
+  dsus: DSU[];
 
   @ManyToMany(() => Project, (project) => project.users, {
     onDelete: 'NO ACTION',

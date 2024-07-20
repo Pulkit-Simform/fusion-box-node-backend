@@ -32,12 +32,12 @@ export class UserController {
 
   @Get('/departments')
   @Public()
-  async getDepartments(){
+  async getDepartments() {
     return {
-      message: "department",
-      data:{
-        departments
-      }
-    }
+      message: 'department',
+      data: {
+        departments,
+      },
+    };
   }
 }
