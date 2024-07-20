@@ -11,14 +11,14 @@ export class CreateSkillDto {
   skill: string;
 
   @ApiProperty({
-    type: ELevel,
+    type: String,
   })
   @IsEnum(ELevel)
   @IsNotEmpty()
   level: ELevel;
 
   @ApiProperty({
-    type: EStatus,
+    type: String,
   })
   @IsEnum(EStatus)
   @IsNotEmpty()
