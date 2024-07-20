@@ -53,6 +53,8 @@ export class AuthService {
       id: userCreated.id,
       email: user.email,
     });
+
+    await this.userService.createSkillsForUser(userCreated,user.department);
     // return user and delete password
     return { ...userCreated, token: token };
   }

@@ -10,6 +10,8 @@ import { CurrentUser } from '../../core/decorators/user.decorator';
 import { ApiOperation } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { User } from '../../database/entities';
+import { Public } from 'src/core/decorators/public.decorator';
+import { departments } from 'src/common/constant';
 
 @Controller('user')
 @UseGuards(ClientAuthGuard)
@@ -26,5 +28,16 @@ export class UserController {
         user,
       },
     };
+  }
+
+  @Get('/departments')
+  @Public()
+  async getDepartments(){
+    return {
+      message: "department",
+      data:{
+        departments
+      }
+    }
   }
 }
