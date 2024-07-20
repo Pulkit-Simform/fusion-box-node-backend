@@ -1,7 +1,13 @@
 import { Column, Entity } from 'typeorm';
 import { BaseEntity } from './base.entity';
+import { Exclude } from 'class-transformer';
 
-@Entity("user")
+export enum departmentEnum {
+  MEAN_STACK = 'MEAN_STACK',
+  FLUTTER = 'FLUTTER',
+}
+
+@Entity('user')
 export class User extends BaseEntity {
   @Column({ length: 255 })
   public full_name: string;
@@ -22,5 +28,9 @@ export class User extends BaseEntity {
   public designation: string;
 
   @Column()
-  public department:string;
+  public department: string;
+
+  @Column()
+  @Exclude()
+  public password: string;
 }
