@@ -15,6 +15,8 @@ export const message = {
       `error.VALIDATION.NOT_EMPTY|{"args":{"key":"${key}"}}`,
     IS_INT: (key: string) =>
       `error.VALIDATION.IS_INT|{"args":{"key":"${key}"}}`,
+    IS_STRING: (key: string) =>
+      `error.VALIDATION.IS_STRING|{"args":{"key":"${key}"}}`,
     IS_BOOLEAN: (key: string) =>
       `error.VALIDATION.IS_BOOLEAN|{"args":{"key":"${key}"}}`,
     IS_UUID_V4: (key: string) =>
