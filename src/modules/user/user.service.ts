@@ -10,8 +10,10 @@ export class UserService {
     @Inject('SKILL') private readonly skillRepo: Repository<Skill>,
   ) {}
 
-  async createSkillsForUser(user: User, department: string){
-    const skills = this.skillRepo.create(getSkillsByDepartment(department,user.id));
+  async createSkillsForUser(user: User, department: string) {
+    const skills = this.skillRepo.create(
+      getSkillsByDepartment(department, user.id),
+    );
     return this.skillRepo.insert(skills);
   }
 
