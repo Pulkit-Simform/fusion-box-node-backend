@@ -35,10 +35,14 @@ export class AuthController {
   async register(
     @Body(ValidationPipe) user: CreateUserDto,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<ResponseCookieToken> {
+  ) {
     const createdUser: ResponseUserDto = await this.authService.register(user);
     res.cookie('jwt', createdUser.token);
-    return { access_token: createdUser.token };
+
+    return {
+      message: 'user created successfully',
+      data: { access_token: createdUser.token },
+    };
   }
 
   @ApiOperation({ summary: 'Login user' })
@@ -48,9 +52,12 @@ export class AuthController {
   async login(
     @Body(ValidationPipe) user: LoginUserDto,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<ResponseCookieToken> {
+  ) {
     const validateUser: ResponseUserDto = await this.authService.login(user);
     res.cookie('jwt', validateUser.token);
-    return { access_token: validateUser.token };
+    return {
+      message: 'user login successfully',
+      data: { access_token: validateUser.token },
+    };
   }
 }
