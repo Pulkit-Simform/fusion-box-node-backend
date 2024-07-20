@@ -3,13 +3,11 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Post,
   UseGuards,
 } from '@nestjs/common';
 import { ClientAuthGuard } from '../../core/guards/auth.guard';
 import { CurrentUser } from '../../core/decorators/user.decorator';
 import { ApiOperation } from '@nestjs/swagger';
-import { Public } from '../../core/decorators/public.decorator';
 import { UserService } from './user.service';
 import { User } from '../../database/entities';
 
