@@ -18,11 +18,4 @@ export class AppController {
     return 'success';
   }
 
-  @Get("/guard")
-  @UseGuards(ClientAuthGuard)  
-  checkWithGuard(@CurrentUser() user){
-    console.log("🚀 ~ AppController ~ checkWithGuard ~ user:", user)
-    
-    return "Checking guard";
-  }
 }

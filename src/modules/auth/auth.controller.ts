@@ -56,7 +56,7 @@ export class AuthController {
     const validateUser: ResponseUserDto = await this.authService.login(user);
     res.cookie('jwt', validateUser.token);
     return {
-      message: 'user created successfully',
+      message: 'user login successfully',
       data: { access_token: validateUser.token },
     };
   }
