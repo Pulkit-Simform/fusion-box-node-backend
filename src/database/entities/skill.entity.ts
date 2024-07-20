@@ -1,9 +1,4 @@
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
 import { User } from './user.entity';
 import { BaseEntity } from './base.entity';
 
@@ -26,7 +21,6 @@ export enum EType {
 
 @Entity('skill')
 export class Skill extends BaseEntity {
-
   @Column({
     type: 'enum',
     enum: EType,
@@ -58,14 +52,6 @@ export class Skill extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.skills)
   user: User;
-
-  @Column()
-  @OneToOne(() => User, { nullable: true })
-  approvedBy: number;
-
-  @Column()
-  @OneToOne(() => User, { nullable: true })
-  rejectedBy: number;
 
   @Column({
     nullable: true,

@@ -7,12 +7,17 @@ import {
   Param,
   Delete,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { ClientAuthGuard } from 'src/core/guards/auth.guard';
+import { CurrentUser } from 'src/core/decorators/user.decorator';
+import { User } from 'src/database/entities';
 
 @Controller('project')
+@UseGuards(ClientAuthGuard)
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
@@ -21,15 +26,13 @@ export class ProjectController {
     const project = await this.projectService.create(createProjectDto);
     return {
       message: 'project created successfully!',
-      data: {
-        project,
-      },
+      data: {},
     };
   }
 
   @Get()
-  async findAll() {
-    const projects = await this.projectService.findAll();
+  async findAll(@CurrentUser() user: User) {
+    const projects = await this.projectService.findAll(user);
     return {
       message: 'projects',
       data: {
@@ -41,7 +44,7 @@ export class ProjectController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const project = await this.projectService.findOne(+id);
-    if(!project){
+    if (!project) {
       throw new NotFoundException(`Project not found with id : ${id}`);
     }
     return {

@@ -19,27 +19,28 @@ import { EventsModule } from './modules/events/events.module';
     AuthModule,
     UserModule,
     SkillModule,
-    ProjectModule,
     ConfigModule,
     LangChainModule,
+    EventsModule,
+    ProjectModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
+        global: true,
         signOptions: {
           expiresIn: configService.get<string>('JWT_EXPIRES_IN'),
         },
       }),
       inject: [ConfigService],
     }),
-    EventsModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
     {
       provide: APP_GUARD,
-      useValue: ClientAuthGuard,
+      useClass: ClientAuthGuard,
     },
   ],
 })

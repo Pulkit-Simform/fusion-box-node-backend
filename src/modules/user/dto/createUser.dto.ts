@@ -6,7 +6,7 @@ import {
   IsStrongPassword,
   MinLength,
   IsPhoneNumber,
-  IsNumber
+  IsNumber,
 } from 'class-validator';
 import { departmentEnum } from '../../../database/entities';
 
@@ -29,12 +29,11 @@ export class CreateUserDto {
   @IsEmail()
   public email: string;
 
-
   @ApiProperty({
     type: String,
     description: 'phone number of the user',
   })
-  @IsString()  
+  @IsString()
   public phone_number: string;
 
   @ApiProperty({
@@ -52,10 +51,9 @@ export class CreateUserDto {
   @IsString()
   public dob: Date;
 
-
   @ApiProperty({
     type: String,
-    description: 'designation of the user',    
+    description: 'designation of the user',
   })
   @IsString()
   public designation: string;
@@ -68,7 +66,6 @@ export class CreateUserDto {
   @IsOptional()
   public department: departmentEnum;
 
-
   @ApiProperty({
     type: String,
     description: 'Password of the user, minimum length is 8',
@@ -78,5 +75,4 @@ export class CreateUserDto {
   @MinLength(8)
   @IsStrongPassword()
   public password: string;
-
 }

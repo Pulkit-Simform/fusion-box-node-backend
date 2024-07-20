@@ -6,7 +6,7 @@ import { Event } from 'src/database/entities/event.entity';
 
 @Injectable()
 export class EventsService {
-  constructor(@Inject("EVENT") private eventRepo: Repository<Event>){}
+  constructor(@Inject('EVENT') private eventRepo: Repository<Event>) {}
   create(createEventDto: CreateEventDto) {
     const event = this.eventRepo.create(createEventDto);
     return this.eventRepo.save(event);
@@ -14,32 +14,32 @@ export class EventsService {
 
   async findEventBetweenRange(startDate: Date, endDate: Date) {
     const events = await this.eventRepo.find({
-      where:{
+      where: {
         startDate: MoreThanOrEqual(startDate),
-        endDate: LessThanOrEqual(endDate)
-      }
-    })
+        endDate: LessThanOrEqual(endDate),
+      },
+    });
     return events;
   }
 
   findOne(id: number) {
     return this.eventRepo.findOneBy({
-      id
-    })
+      id,
+    });
   }
 
   async update(id: number, updateEventDto: UpdateEventDto) {
     const event = await this.findOne(id);
-    if(!event){
+    if (!event) {
       throw new NotFoundException(`Event not found with id : ${id}`);
     }
-    Object.assign(event,{...updateEventDto});
+    Object.assign(event, { ...updateEventDto });
     return this.eventRepo.save(event);
   }
 
   async remove(id: number) {
     const event = await this.findOne(id);
-    if(!event){
+    if (!event) {
       throw new NotFoundException(`Event not found with id : ${id}`);
     }
     return this.eventRepo.remove(event);
