@@ -26,10 +26,18 @@ export class UserService {
     })
   }
 
-  async getUsersByEmail(email: string): Promise<User> {
+  async getUserByEmail(email: string): Promise<User> {
     return await this.userRepository.findOne({
       where: {
         email: email,
+      },
+    });
+  }
+
+  async getUserByPhoneNumber(phoneNumber: string): Promise<User> {
+    return await this.userRepository.findOne({
+      where: {
+        phone_number:phoneNumber
       },
     });
   }
