@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum ELevel {
   BEGINNER = 'BEGINNER',
@@ -12,12 +12,26 @@ export enum EStatus {
   REJECTED = 'REJECTED',
 }
 
+export enum  EType {
+   PRIMARY = "PRIMARY",
+   SECONDARY = "SECONDARY" 
+}
+
 @Entity('skill')
-export class Skill {
+export class Skill  extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    type: "enum",
+    enum: EType,
+    default: EType.PRIMARY,
+  })
+  stype: string;
+
+  @Column({
+    nullable: true
+  })
   category: string;
 
   @Column({
@@ -55,5 +69,5 @@ export class Skill {
   @Column({
     nullable: true,
   })
-  commnet: string;
+  comment: string;
 }
