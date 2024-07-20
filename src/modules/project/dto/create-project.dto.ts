@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsArray,
   IsDate,
@@ -28,10 +29,12 @@ export class CreateProjectDto {
   users: number[];
 
   @IsDate()
+  @Type(() => Date)
   @IsNotEmpty()
   startDate: Date;
 
   @IsDate()
+  @Type(() => Date)
   @IsNotEmpty()
   endDate: Date;
 
