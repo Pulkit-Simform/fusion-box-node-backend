@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToMany } from 'typeorm';
+import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
 import { User } from './user.entity';
 import { BaseEntity } from './base.entity';
+import { DSU } from './dsu.entity';
 
 @Entity('project')
 export class Project extends BaseEntity {
@@ -18,6 +19,9 @@ export class Project extends BaseEntity {
     onUpdate: 'NO ACTION',
   })
   users: User[];
+
+  @OneToMany(() => DSU, (dsu) => dsu.project)
+  dsus: DSU[];
 
   @Column({
     type: 'date',

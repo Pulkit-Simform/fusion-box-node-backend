@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { In, Repository } from 'typeorm';
+import { FindOneOptions, In, Repository } from 'typeorm';
 import { Project, User } from 'src/database/entities';
 import { UserService } from '../user/user.service';
 
@@ -34,6 +34,10 @@ export class ProjectService {
 
   findOne(id: number) {
     return this.projectRepo.findOneBy({ id });
+  }
+
+  findOneFilter(filters: FindOneOptions<Partial<Project>>) {
+    return this.projectRepo.findOne(filters);
   }
 
   async update(id: number, updateProjectDto: UpdateProjectDto) {

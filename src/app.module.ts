@@ -12,6 +12,7 @@ import { SkillModule } from './modules/skill/skill.module';
 import { ProjectModule } from './modules/project/project.module';
 import { LangChainModule } from './modules/langchain/langchain.module';
 import { EventsModule } from './modules/events/events.module';
+import { DsuModule } from './modules/dsu/dsu.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { EventsModule } from './modules/events/events.module';
       }),
       inject: [ConfigService],
     }),
+    DsuModule,
   ],
   controllers: [AppController],
   providers: [
