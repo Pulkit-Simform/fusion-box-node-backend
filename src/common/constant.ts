@@ -378,20 +378,24 @@ export const primarySkills = {
   ],
 };
 
-export const getSkillsByDepartment = (department,userId)=>{
-  return primarySkills[department].map((skillParent)=>{
-    return skillParent.skills.map((skill)=>{
-      return {
-        category: skillParent.category,
-        skill,
-        stype: EType.PRIMARY,
-        level: ELevel.BEGINNER,
-        status: EStatus.APPROVED,
-        user: userId
-      }
+export const getSkillsByDepartment = (department, userId) => {
+  return primarySkills[department]
+    .map((skillParent) => {
+      return skillParent.skills.map((skill) => {
+        return {
+          category: skillParent.category,
+          skill,
+          stype: EType.PRIMARY,
+          level: ELevel.BEGINNER,
+          status: EStatus.APPROVED,
+          user: userId,
+        };
+      });
     })
-  }).flat();
+    .flat();
+};
+
+export enum Sender {
+  HUMAN = 'Human',
+  SYSTEM = 'System',
 }
-
-
-

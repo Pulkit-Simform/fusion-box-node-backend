@@ -3,16 +3,37 @@ import { Skill, User } from './../../database/entities';
 import { In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto';
 import { getSkillsByDepartment } from 'src/common/constant';
+import {
+  ChatHistory,
+  QueryType,
+} from 'src/database/entities/chat.history.entity';
+import { logger } from 'src/utils/logger.service';
 @Injectable()
 export class UserService {
   constructor(
     @Inject('USER') private readonly userRepository: Repository<User>,
     @Inject('SKILL') private readonly skillRepo: Repository<Skill>,
+    @Inject('CHAT_HISTORY')
+    private readonly chatHistoryRepository: Repository<ChatHistory>,
   ) {}
 
-  async createSkillsForUser(user: User, department: string){
-    const skills = this.skillRepo.create(getSkillsByDepartment(department,user.id));
+  async createSkillsForUser(user: User, department: string) {
+    const skills = this.skillRepo.create(
+      getSkillsByDepartment(department, user.id),
+    );
     return this.skillRepo.insert(skills);
+  }
+
+  async createDefaultChatHistoryForUser(user: User) {
+    try {
+      await this.chatHistoryRepository.save({ query_type: QueryType.DB, user });
+      await this.chatHistoryRepository.save({
+        query_type: QueryType.DOC,
+        user,
+      });
+    } catch (error) {
+      logger.error('Error while creating default chat history', { error });
+    }
   }
 
   async getAllUsers(): Promise<User[]> {

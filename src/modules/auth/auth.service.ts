@@ -54,7 +54,9 @@ export class AuthService {
       email: user.email,
     });
 
-    await this.userService.createSkillsForUser(userCreated,user.department);
+    await this.userService.createSkillsForUser(userCreated, user.department);
+    await this.userService.createDefaultChatHistoryForUser(userCreated);
+
     // return user and delete password
     return { ...userCreated, token: token };
   }
