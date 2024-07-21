@@ -1,6 +1,6 @@
 import { Sender } from 'src/common/constant';
 
-export interface ChatMessage {
+export class ChatMessage {
   sender: Sender;
   message: string;
 }
