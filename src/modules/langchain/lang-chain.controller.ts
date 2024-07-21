@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Put,
@@ -53,7 +54,6 @@ export class LangChainController {
     summary: 'This api is returns chat history of user.',
   })
   @ApiOkResponse({ description: '`Retrieved.`' })
-  @ApiBearerAuth()
   async getChatHistory(
     @CurrentUser() user: User,
     @Query() query: GetChatHistoryReqDTO,
@@ -72,7 +72,7 @@ export class LangChainController {
 
   @Put('history')
   @ApiOperation({
-    summary: 'This api is updates the chat history.',
+    summary: 'This api updates the chat history.',
   })
   @ApiOkResponse({ description: '`Updated.`' })
   async updateChatHistory(
@@ -87,6 +87,20 @@ export class LangChainController {
 
     return new ResponseResult({
       data,
+      message: message.SUCCESS.OK,
+      statusCode: HttpStatus.ACCEPTED,
+    });
+  }
+
+  @Delete('history')
+  @ApiOperation({
+    summary: 'This api deletes the chat history.',
+  })
+  @ApiOkResponse({ description: '`Deleted.`' })
+  async deleteChatHistory(@CurrentUser() user: User) {
+    await this.langChainService.deleteChatHistory(user.id);
+    return new ResponseResult({
+      data: {},
       message: message.SUCCESS.OK,
       statusCode: HttpStatus.ACCEPTED,
     });

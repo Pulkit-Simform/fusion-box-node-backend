@@ -173,4 +173,15 @@ export class LangChainService {
       logger.error('Error in get chat history', { error });
     }
   }
+
+  async deleteChatHistory(userId: number) {
+    try {
+      return await this.chatHistoryRepository.update(
+        { user: { id: userId } },
+        { messages: [] },
+      );
+    } catch (error) {
+      logger.error('Error in delete chat history', { error });
+    }
+  }
 }
