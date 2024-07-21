@@ -3,11 +3,12 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { Event } from 'src/database/entities/event.entity';
+import { message } from 'src/common/message';
 
 @Injectable()
 export class EventsService {
   constructor(@Inject('EVENT') private eventRepo: Repository<Event>) {}
-  create(createEventDto: CreateEventDto) {
+  async create(createEventDto: CreateEventDto) {
     const event = this.eventRepo.create(createEventDto);
     return this.eventRepo.save(event);
   }
@@ -22,7 +23,7 @@ export class EventsService {
     return events;
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.eventRepo.findOneBy({
       id,
     });
@@ -31,7 +32,7 @@ export class EventsService {
   async update(id: number, updateEventDto: UpdateEventDto) {
     const event = await this.findOne(id);
     if (!event) {
-      throw new NotFoundException(`Event not found with id : ${id}`);
+      throw new NotFoundException(message.EVENT.ERROR.NOT_FOUND);
     }
     Object.assign(event, { ...updateEventDto });
     return this.eventRepo.save(event);
@@ -40,7 +41,7 @@ export class EventsService {
   async remove(id: number) {
     const event = await this.findOne(id);
     if (!event) {
-      throw new NotFoundException(`Event not found with id : ${id}`);
+      throw new NotFoundException(message.EVENT.ERROR.NOT_FOUND);
     }
     return this.eventRepo.remove(event);
   }

@@ -10,6 +10,7 @@ import { Project, User } from 'src/database/entities';
 import { In, Repository } from 'typeorm';
 import { DSU } from 'src/database/entities/dsu.entity';
 import { ProjectService } from '../project/project.service';
+import { message } from 'src/common/message';
 
 @Injectable()
 export class DsuService {
@@ -29,7 +30,7 @@ export class DsuService {
       },
     });
     if (!project) {
-      throw new BadRequestException('No Project found with this id!');
+      throw new BadRequestException(message.DSU.ERROR.NO_PROJECT_FOUND);
     }
     const dsu = this.dsuRepo.create({
       ...createDsuDto,
@@ -52,7 +53,7 @@ export class DsuService {
         },
       });
       if (!projects) {
-        throw new BadRequestException('no project found with this id!');
+        throw new BadRequestException(message.DSU.ERROR.NO_PROJECT_FOUND);
       }
     } else {
       projects = await this.projectService.findAll(user);
@@ -85,7 +86,7 @@ export class DsuService {
     };
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.dsuRepo.findOne({
       relations: ['project', 'user'],
       where: {
@@ -101,7 +102,7 @@ export class DsuService {
       },
     });
     if (!dsu) {
-      throw new NotFoundException('No dsu found with this id');
+      throw new NotFoundException(message.DSU.ERROR.NO_DSU_FOUND);
     }
     Object.assign(dsu, updateDsuDto);
     return this.dsuRepo.save(dsu);
@@ -114,7 +115,7 @@ export class DsuService {
       },
     });
     if (!dsu) {
-      throw new NotFoundException('No dsu found with this id');
+      throw new NotFoundException(message.DSU.ERROR.NO_DSU_FOUND);
     }
     return this.dsuRepo.remove(dsu);
   }

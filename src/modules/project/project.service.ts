@@ -4,6 +4,7 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { FindOneOptions, In, Repository } from 'typeorm';
 import { Project, User } from 'src/database/entities';
 import { UserService } from '../user/user.service';
+import { message } from 'src/common/message';
 
 @Injectable()
 export class ProjectService {
@@ -21,7 +22,7 @@ export class ProjectService {
     return this.projectRepo.save(project);
   }
 
-  findAll(user: User) {
+  async findAll(user: User) {
     return this.projectRepo.find({
       relations: ['users'],
       where: {
@@ -32,18 +33,18 @@ export class ProjectService {
     });
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.projectRepo.findOneBy({ id });
   }
 
-  findOneFilter(filters: FindOneOptions<Partial<Project>>) {
+  async findOneFilter(filters: FindOneOptions<Partial<Project>>) {
     return this.projectRepo.findOne(filters);
   }
 
   async update(id: number, updateProjectDto: UpdateProjectDto) {
     const project = await this.findOne(id);
     if (!project) {
-      throw new NotFoundException(`Project not found with id: ${id}`);
+      throw new NotFoundException(message.PROJECT.ERROR.NOT_FOUND);
     }
     Object.assign(project, updateProjectDto);
     return this.projectRepo.save(project);
@@ -52,7 +53,7 @@ export class ProjectService {
   async remove(id: number) {
     const project = await this.findOne(id);
     if (!project) {
-      throw new NotFoundException(`Project not found with id: ${id}`);
+      throw new NotFoundException(message.PROJECT.ERROR.NOT_FOUND);
     }
     return this.projectRepo.remove(project);
   }

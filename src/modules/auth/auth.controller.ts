@@ -14,6 +14,7 @@ import { LoginUserDto } from './dto';
 import { ResponseCookieToken } from './dto/responseCookie.dto';
 import { Response } from 'express';
 import { Public } from '../../core/decorators/public.decorator';
+import { message } from 'src/common/message';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -40,7 +41,7 @@ export class AuthController {
     res.cookie('jwt', createdUser.token);
 
     return {
-      message: 'user created successfully',
+      message: message.SUCCESS.REGISTER,
       data: { access_token: createdUser.token },
     };
   }
@@ -56,7 +57,7 @@ export class AuthController {
     const validateUser: ResponseUserDto = await this.authService.login(user);
     res.cookie('jwt', validateUser.token);
     return {
-      message: 'user login successfully',
+      message: message.SUCCESS.AUTH.LOGIN,
       data: { access_token: validateUser.token },
     };
   }

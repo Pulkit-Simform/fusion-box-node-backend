@@ -3,6 +3,7 @@ import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { Repository } from 'typeorm';
 import { Skill, User } from 'src/database/entities';
+import { message } from 'src/common/message';
 
 @Injectable()
 export class SkillService {
@@ -33,13 +34,17 @@ export class SkillService {
   async update(id: number, updateSkillDto: UpdateSkillDto) {
     const skill = await this.findOne(id);
     if (!skill) {
-      throw new NotFoundException('skill not found with this id');
+      throw new NotFoundException(message.SKILL.ERROR.NOT_FOUND);
     }
     Object.assign(skill, updateSkillDto);
     return this.skillRepo.save(skill);
   }
 
   async remove(id: number) {
+    const skill = await this.findOne(id);
+    if (!skill) {
+      throw new NotFoundException(message.SKILL.ERROR.NOT_FOUND);
+    }
     return await this.skillRepo.delete(id);
   }
 }

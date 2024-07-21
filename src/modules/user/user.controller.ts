@@ -12,6 +12,7 @@ import { UserService } from './user.service';
 import { User } from '../../database/entities';
 import { Public } from 'src/core/decorators/public.decorator';
 import { departments, Tags } from 'src/common/constant';
+import { message } from 'src/common/message';
 
 @Controller('user')
 @ApiBearerAuth()
@@ -25,7 +26,7 @@ export class UserController {
   @HttpCode(HttpStatus.ACCEPTED)
   async register(@CurrentUser() user: User) {
     return {
-      message: 'users profile',
+      message: message.SUCCESS.USER_PROFILE,
       data: {
         user,
       },
@@ -36,7 +37,7 @@ export class UserController {
   @Public()
   async getDepartments() {
     return {
-      message: 'department',
+      message: message.SUCCESS.DEPARTMENT,
       data: {
         departments,
       },

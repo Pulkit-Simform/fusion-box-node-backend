@@ -7,8 +7,11 @@ import {
   MinLength,
   IsPhoneNumber,
   IsNumber,
+  IsDate,
+  IsNotEmpty,
 } from 'class-validator';
 import { departmentEnum } from '../../../database/entities';
+import { Type } from 'class-transformer';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -48,7 +51,9 @@ export class CreateUserDto {
     description: 'birthday date of the user',
     default: new Date(Date.now()),
   })
-  @IsString()
+  @IsDate()
+  @Type(() => Date)
+  @IsNotEmpty()
   public dob: Date;
 
   @ApiProperty({

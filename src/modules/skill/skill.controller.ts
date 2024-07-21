@@ -19,6 +19,7 @@ import { User } from 'src/database/entities';
 import { ClientAuthGuard } from 'src/core/guards/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Tags } from 'src/common/constant';
+import { message } from 'src/common/message';
 
 @ApiTags(Tags.SKILL)
 @Controller('skill')
@@ -34,7 +35,7 @@ export class SkillController {
   ) {
     const skill = await this.skillService.create(createSkillDto, user);
     return {
-      message: 'skill has been created Successfully!',
+      message: message.SKILL.SUCCESS.CREATED,
       data: {
         skill,
       },
@@ -45,7 +46,7 @@ export class SkillController {
   async findAll(@CurrentUser() user: User) {
     const skills = await this.skillService.findAll(user);
     return {
-      message: 'skills',
+      message: message.SKILL.SUCCESS.SINGLE_PROJECT,
       data: {
         skills,
       },
@@ -57,10 +58,10 @@ export class SkillController {
   async findOne(@Param('id') id: string) {
     const skill = await this.skillService.findOne(+id);
     if (!skill) {
-      throw new NotFoundException('skill not found with this id');
+      throw new NotFoundException(message.SKILL.ERROR.NOT_FOUND);
     }
     return {
-      message: 'skills',
+      message: message.SKILL.SUCCESS.SINGLE_PROJECT,
       data: {
         skill,
       },
@@ -74,7 +75,7 @@ export class SkillController {
   ) {
     const skill = await this.skillService.update(+id, updateSkillDto);
     return {
-      message: 'skills updated',
+      message: message.SKILL.SUCCESS.UPDATED,
       data: {
         skill,
       },
@@ -84,11 +85,8 @@ export class SkillController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const skill = await this.skillService.remove(+id);
-    if (!skill) {
-      throw new NotFoundException('skill not found with this id');
-    }
     return {
-      message: 'skill deleted sucessfully!',
+      message: message.SKILL.SUCCESS.DELETED,
       data: {},
     };
   }

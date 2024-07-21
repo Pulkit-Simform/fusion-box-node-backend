@@ -17,6 +17,7 @@ import { CurrentUser } from 'src/core/decorators/user.decorator';
 import { User } from 'src/database/entities';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Tags } from 'src/common/constant';
+import { message } from 'src/common/message';
 
 @ApiTags(Tags.PROJECT)
 @Controller('project')
@@ -29,7 +30,7 @@ export class ProjectController {
   async create(@Body() createProjectDto: CreateProjectDto) {
     const project = await this.projectService.create(createProjectDto);
     return {
-      message: 'project created successfully!',
+      message: message.PROJECT.SUCCESS.CREATED,
       data: {},
     };
   }
@@ -38,7 +39,7 @@ export class ProjectController {
   async findAll(@CurrentUser() user: User) {
     const projects = await this.projectService.findAll(user);
     return {
-      message: 'projects',
+      message: message.PROJECT.SUCCESS.SINGLE_PROJECT,
       data: {
         projects,
       },
@@ -49,10 +50,10 @@ export class ProjectController {
   async findOne(@Param('id') id: string) {
     const project = await this.projectService.findOne(+id);
     if (!project) {
-      throw new NotFoundException(`Project not found with id : ${id}`);
+      throw new NotFoundException(message.PROJECT.ERROR.NOT_FOUND);
     }
     return {
-      message: 'project',
+      message: message.PROJECT.SUCCESS.SINGLE_PROJECT,
       data: {
         project,
       },
@@ -66,7 +67,7 @@ export class ProjectController {
   ) {
     const project = await this.projectService.update(+id, updateProjectDto);
     return {
-      message: 'project updated successfully!',
+      message: message.PROJECT.SUCCESS.UPDATED,
       data: {
         project,
       },
@@ -77,7 +78,7 @@ export class ProjectController {
   async remove(@Param('id') id: string) {
     const project = await this.projectService.remove(+id);
     return {
-      message: 'project removed successfully!',
+      message: message.PROJECT.SUCCESS.DELETED,
       data: {},
     };
   }

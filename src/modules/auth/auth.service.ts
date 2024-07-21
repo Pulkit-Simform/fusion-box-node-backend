@@ -5,6 +5,7 @@ import { genSalt, hash, compare } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { sign } from 'jsonwebtoken';
 import { LoginUserDto } from './dto';
+import { message } from 'src/common/message';
 
 export interface JWTPayload {
   id: number;
@@ -35,10 +36,10 @@ export class AuthService {
 
   async register(user: CreateUserDto): Promise<ResponseUserDto> {
     if (await this.userService.getUserByEmail(user.email))
-      throw new BadRequestException('User already registered');
+      throw new BadRequestException(message.ERROR.SIGNUP.USER_EMAIL_EXISTS);
 
     if (await this.userService.getUserByPhoneNumber(user.phone_number))
-      throw new BadRequestException('User already registered');
+      throw new BadRequestException(message.ERROR.SIGNUP.USER_PHONE_EXISTS);
 
     // if not then hash the password
     const salt = await genSalt(8);
@@ -65,12 +66,12 @@ export class AuthService {
     const availableUser = await this.userService.getUserByEmail(user.email);
 
     if (!availableUser)
-      throw new BadRequestException('User email or password is not correct');
+      throw new BadRequestException(message.ERROR.AUTH.INVALID_CREDENTIALS);
 
     const checkPassword = await compare(user.password, availableUser.password);
 
     if (!checkPassword)
-      throw new BadRequestException('User email or password is not correct');
+      throw new BadRequestException(message.ERROR.AUTH.INVALID_CREDENTIALS);
 
     const token = await this.createToken({
       id: availableUser.id,

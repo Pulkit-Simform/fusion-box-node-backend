@@ -18,6 +18,7 @@ import { CurrentUser } from 'src/core/decorators/user.decorator';
 import { User } from 'src/database/entities';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Tags } from 'src/common/constant';
+import { message } from 'src/common/message';
 
 @ApiTags(Tags.DSU)
 @Controller('dsu')
@@ -33,7 +34,7 @@ export class DsuController {
   ) {
     const dsu = await this.dsuService.create(createDsuDto, user);
     return {
-      message: 'DSU created',
+      message: message.DSU.SUCCESS.CREATED,
       data: {
         dsu,
       },
@@ -48,26 +49,43 @@ export class DsuController {
     @Query('page') page: number,
     @Query('projectId') projectId?: number,
   ) {
-    console.log('projectId', projectId);
     const dsus = await this.dsuService.findAll(page || 1, user, projectId);
     return {
-      message: 'dsu',
+      message: message.DSU.SUCCESS.SINGLE_DSU,
       data: dsus,
     };
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.dsuService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const dsu = await this.dsuService.findOne(+id);
+    return {
+      message: message.DSU.SUCCESS.SINGLE_DSU,
+      data: {
+        dsu,
+      },
+    };
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDsuDto: UpdateDsuDto) {
-    return this.dsuService.update(+id, updateDsuDto);
+  async update(@Param('id') id: string, @Body() updateDsuDto: UpdateDsuDto) {
+    const dsu = await this.dsuService.update(+id, updateDsuDto);
+    return {
+      message: message.DSU.SUCCESS.UPDATED,
+      data: {
+        dsu,
+      },
+    };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.dsuService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const dsu = await this.dsuService.remove(+id);
+    return {
+      message: message.DSU.SUCCESS.DELETED,
+      data: {
+        dsu,
+      },
+    };
   }
 }
