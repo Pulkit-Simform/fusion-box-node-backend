@@ -25,6 +25,7 @@ import {
   maxAllowedChatHistory,
   Sender,
 } from 'src/common/constant';
+import { handleError } from 'src/utils/handle.error';
 
 @Injectable()
 export class LangChainService {
@@ -69,6 +70,7 @@ export class LangChainService {
       return typeORMVectorStore.asRetriever({ k: 6, searchType: 'similarity' });
     } catch (error) {
       logger.error('Error in loading typeorm vector store', { error });
+      handleError(error);
     }
   }
 
@@ -128,6 +130,7 @@ export class LangChainService {
       return aiMessage;
     } catch (error) {
       logger.error('Error in chat API', { error });
+      handleError(error);
     }
   }
 
@@ -160,6 +163,7 @@ export class LangChainService {
       await this.chatHistoryRepository.save(chatHistory);
     } catch (error) {
       logger.error('Error while updating chat history', { error });
+      handleError(error);
     }
   }
 
@@ -171,6 +175,7 @@ export class LangChainService {
       });
     } catch (error) {
       logger.error('Error in get chat history', { error });
+      handleError(error);
     }
   }
 
@@ -182,6 +187,7 @@ export class LangChainService {
       );
     } catch (error) {
       logger.error('Error in delete chat history', { error });
+      handleError(error);
     }
   }
 }
