@@ -21,5 +21,5 @@ export class OnlineMerchant extends BaseEntity {
   website: string;
 
   @Column({ type: 'boolean', nullable: false })
-  restro_pass: boolean;
+  resto_pass: boolean;
 }
