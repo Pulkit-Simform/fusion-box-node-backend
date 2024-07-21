@@ -16,7 +16,11 @@ import {
 import { message } from 'src/common/message';
 import { ResponseResult } from 'src/core/interceptors/response';
 import { LangChainService } from './lang-chain.service';
-import { AskPolicyReqDTO } from './dto';
+import {
+  AskPolicyReqDTO,
+  GetChatHistoryReqDTO,
+  PutChatHistoryReqDTO,
+} from './dto';
 import { ClientAuthGuard } from 'src/core/guards/auth.guard';
 import { CurrentUser } from 'src/core/decorators/user.decorator';
 import { User } from 'src/database/entities';
@@ -31,7 +35,7 @@ export class LangChainController {
   @ApiOperation({
     summary: 'This api is return searched data from stored vectors.',
   })
-  @ApiOkResponse({ description: '`Ask Policies.`' })
+  @ApiOkResponse({ description: '`Ok`' })
   @ApiBearerAuth()
   async chat(@CurrentUser() user: User, @Query() query: AskPolicyReqDTO) {
     const data = await this.langChainService.chat(query.input, user);
@@ -45,11 +49,14 @@ export class LangChainController {
 
   @Get('history')
   @ApiOperation({
-    summary: 'This api is return searched data from stored vectors.',
+    summary: 'This api is returns chat history of user.',
   })
-  @ApiOkResponse({ description: '`Ask Policies.`' })
+  @ApiOkResponse({ description: '`Retrieved.`' })
   @ApiBearerAuth()
-  async getChatHistory(@CurrentUser() user: User, @Query() query: any) {
+  async getChatHistory(
+    @CurrentUser() user: User,
+    @Query() query: GetChatHistoryReqDTO,
+  ) {
     const data = await this.langChainService.getChatHistory(
       user.id,
       query.queryType,
@@ -64,11 +71,14 @@ export class LangChainController {
 
   @Put('history')
   @ApiOperation({
-    summary: 'This api is return searched data from stored vectors.',
+    summary: 'This api is updates the chat history.',
   })
-  @ApiOkResponse({ description: '`Ask Policies.`' })
+  @ApiOkResponse({ description: '`Updated.`' })
   @ApiBearerAuth()
-  async updateChatHistory(@CurrentUser() user: User, @Body() query: any) {
+  async updateChatHistory(
+    @CurrentUser() user: User,
+    @Body() query: PutChatHistoryReqDTO,
+  ) {
     const data = await this.langChainService.updateChatHistory(
       user.id,
       query.queryType,

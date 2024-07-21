@@ -20,7 +20,11 @@ import {
   ChatHistory,
   QueryType,
 } from 'src/database/entities/chat.history.entity';
-import { Sender } from 'src/common/constant';
+import {
+  defaultPrompts,
+  maxAllowedChatHistory,
+  Sender,
+} from 'src/common/constant';
 
 @Injectable()
 export class LangChainService {
@@ -76,15 +80,8 @@ export class LangChainService {
       });
       const chatHistory = userChatHistory?.messages?.map((m) => m.message);
 
-      const qaSystemPrompt = `You are an assistant for question-answering tasks.
-Use the following pieces of retrieved context to answer the question.
-If you don't know the answer, just say that you don't know.
-Use three sentences maximum and keep the answer concise.
-
-{context}`;
-
       const qaPrompt = ChatPromptTemplate.fromMessages([
-        ['system', qaSystemPrompt],
+        ['system', defaultPrompts.qaSystemPrompt],
         new MessagesPlaceholder('chatHistory'),
         ['human', '{question}'],
       ]);
@@ -135,13 +132,8 @@ Use three sentences maximum and keep the answer concise.
   }
 
   private getContextualizedChain() {
-    const contextualizeQSystemPrompt = `Given a chat history and the latest user question
-which might reference context in the chat history, formulate a standalone question
-which can be understood without the chat history. Do NOT answer the question,
-just reformulate it if needed and otherwise return it as is.`;
-
     const contextualizeQPrompt = ChatPromptTemplate.fromMessages([
-      ['system', contextualizeQSystemPrompt],
+      ['system', defaultPrompts.contextualizeQSystemPrompt],
       new MessagesPlaceholder('chatHistory'),
       ['human', '{question}'],
     ]);
@@ -162,7 +154,8 @@ just reformulate it if needed and otherwise return it as is.`;
         query_type: queryType,
       });
 
-      chatHistory?.messages.push(...newMessages);
+      chatHistory.messages.push(...newMessages);
+      chatHistory.messages = chatHistory.messages.slice(-maxAllowedChatHistory);
 
       await this.chatHistoryRepository.save(chatHistory);
     } catch (error) {
