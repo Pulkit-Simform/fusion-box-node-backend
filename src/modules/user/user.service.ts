@@ -8,6 +8,8 @@ import {
   QueryType,
 } from 'src/database/entities/chat.history.entity';
 import { logger } from 'src/utils/logger.service';
+import { handleError } from 'src/utils/handle.error';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -33,6 +35,7 @@ export class UserService {
       });
     } catch (error) {
       logger.error('Error while creating default chat history', { error });
+      handleError(error);
     }
   }
 
