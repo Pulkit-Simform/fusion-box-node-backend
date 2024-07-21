@@ -1,20 +1,37 @@
 import { OpenAIEmbeddings, ChatOpenAI } from '@langchain/openai';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from 'src/config/config.service';
 import { TypeORMVectorStore } from '@langchain/community/vectorstores/typeorm';
-import { DataSourceOptions } from 'typeorm';
+import { DataSourceOptions, Repository } from 'typeorm';
 import { logger } from 'src/utils/logger.service';
 import { StringOutputParser } from '@langchain/core/output_parsers';
-import { PromptTemplate } from '@langchain/core/prompts';
-import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
-import { AskPolicyReqDTO } from './dto';
+import {
+  ChatPromptTemplate,
+  MessagesPlaceholder,
+} from '@langchain/core/prompts';
+import {
+  RunnablePassthrough,
+  RunnableSequence,
+} from '@langchain/core/runnables';
+import { formatDocumentsAsString } from 'langchain/util/document';
+import { User } from 'src/database/entities';
+import { ChatMessage } from 'src/core/interfaces/chatHistory';
+import {
+  ChatHistory,
+  QueryType,
+} from 'src/database/entities/chat.history.entity';
+import { Sender } from 'src/common/constant';
 
 @Injectable()
 export class LangChainService {
   private llmInstance: ChatOpenAI;
   private postgresConnectionOptions: DataSourceOptions;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    @Inject('CHAT_HISTORY')
+    private readonly chatHistoryRepository: Repository<ChatHistory>,
+  ) {
     this.llmInstance = new ChatOpenAI({
       model: 'gpt-3.5-turbo',
       temperature: 0,
@@ -51,36 +68,116 @@ export class LangChainService {
     }
   }
 
-  async getPolicyExplanation(data: AskPolicyReqDTO) {
-    const { input } = data;
+  async chat(question: string, user: User) {
+    try {
+      const userChatHistory = await this.chatHistoryRepository.findOneBy({
+        user: { id: user.id },
+        query_type: QueryType.DOC,
+      });
+      const chatHistory = userChatHistory?.messages?.map((m) => m.message);
 
-    const retriever = await this.getTypeORMRetriever();
+      const qaSystemPrompt = `You are an assistant for question-answering tasks.
+Use the following pieces of retrieved context to answer the question.
+If you don't know the answer, just say that you don't know.
+Use three sentences maximum and keep the answer concise.
 
-    const template = `Use the following pieces of context to answer the question at the end.
-    If you don't know the answer, just say that you don't know, don't try to make up an answer.
-    Use three sentences maximum and keep the answer as concise as possible.
+{context}`;
 
-    {context}
+      const qaPrompt = ChatPromptTemplate.fromMessages([
+        ['system', qaSystemPrompt],
+        new MessagesPlaceholder('chatHistory'),
+        ['human', '{question}'],
+      ]);
 
-    Question: {question}
+      const contextualizedQuestion = (input: Record<string, unknown>) => {
+        if ('chatHistory' in input) {
+          return this.getContextualizedChain();
+        }
+        return input.question as any;
+      };
 
-    Helpful Answer:`;
+      const retriever = await this.getTypeORMRetriever();
 
-    const customRagPrompt = PromptTemplate.fromTemplate(template);
+      const ragChain = RunnableSequence.from([
+        RunnablePassthrough.assign({
+          context: (input: Record<string, unknown>) => {
+            if ('chatHistory' in input) {
+              const chain = contextualizedQuestion(input);
+              return chain.pipe(retriever).pipe(formatDocumentsAsString);
+            }
+            return '';
+          },
+        }),
+        qaPrompt,
+        this.llmInstance,
+        new StringOutputParser(),
+      ]);
 
-    const ragChain = await createStuffDocumentsChain({
-      llm: this.llmInstance,
-      prompt: customRagPrompt,
-      outputParser: new StringOutputParser(),
-    });
+      const aiMessage = await ragChain.invoke({ question, chatHistory });
 
-    const context = await retriever.invoke(input);
+      const newMessages: ChatMessage[] = [
+        {
+          sender: Sender.HUMAN,
+          message: question,
+        },
+        {
+          sender: Sender.SYSTEM,
+          message: aiMessage,
+        },
+      ];
 
-    const res = await ragChain.invoke({
-      question: input,
-      context,
-    });
+      await this.updateChatHistory(user.id, QueryType.DOC, newMessages);
 
-    return res;
+      return aiMessage;
+    } catch (error) {
+      logger.error('Error in chat API', { error });
+    }
+  }
+
+  private getContextualizedChain() {
+    const contextualizeQSystemPrompt = `Given a chat history and the latest user question
+which might reference context in the chat history, formulate a standalone question
+which can be understood without the chat history. Do NOT answer the question,
+just reformulate it if needed and otherwise return it as is.`;
+
+    const contextualizeQPrompt = ChatPromptTemplate.fromMessages([
+      ['system', contextualizeQSystemPrompt],
+      new MessagesPlaceholder('chatHistory'),
+      ['human', '{question}'],
+    ]);
+
+    return contextualizeQPrompt
+      .pipe(this.llmInstance)
+      .pipe(new StringOutputParser());
+  }
+
+  async updateChatHistory(
+    userId: number,
+    queryType: QueryType,
+    newMessages: ChatMessage[],
+  ) {
+    try {
+      const chatHistory = await this.chatHistoryRepository.findOneBy({
+        user: { id: userId },
+        query_type: queryType,
+      });
+
+      chatHistory?.messages.push(...newMessages);
+
+      await this.chatHistoryRepository.save(chatHistory);
+    } catch (error) {
+      logger.error('Error while updating chat history', { error });
+    }
+  }
+
+  async getChatHistory(userId: number, queryType: QueryType) {
+    try {
+      return await this.chatHistoryRepository.findOneBy({
+        user: { id: userId },
+        query_type: queryType,
+      });
+    } catch (error) {
+      logger.error('Error in get chat history', { error });
+    }
   }
 }

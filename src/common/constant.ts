@@ -394,3 +394,8 @@ export const getSkillsByDepartment = (department, userId) => {
     })
     .flat();
 };
+
+export enum Sender {
+  HUMAN = 'Human',
+  SYSTEM = 'System',
+}
