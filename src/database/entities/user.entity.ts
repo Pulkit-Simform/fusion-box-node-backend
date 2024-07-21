@@ -7,8 +7,12 @@ import { ChatHistory } from './chat.history.entity';
 import { DSU } from './dsu.entity';
 
 export enum departmentEnum {
-  MEAN_STACK = 'MEAN_STACK',
+  MEAN = 'MEAN',
   FLUTTER = 'FLUTTER',
+  MERN = 'MERN',
+  DEVOPS = 'DEVOPS',
+  QA = 'QA',
+  UIUX = 'UIUX',
 }
 
 @Entity('user')

@@ -9,9 +9,10 @@ import {
   IsNumber,
   IsDate,
   IsNotEmpty,
+  IsEnum,
 } from 'class-validator';
 import { departmentEnum } from '../../../database/entities';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -68,7 +69,8 @@ export class CreateUserDto {
     description: 'department of the user [MEAN_STACK,FLUTTER]',
     default: departmentEnum.FLUTTER,
   })
-  @IsOptional()
+  @IsEnum(departmentEnum)
+  @IsNotEmpty()
   public department: departmentEnum;
 
   @ApiProperty({

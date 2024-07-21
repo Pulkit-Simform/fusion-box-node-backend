@@ -37,6 +37,7 @@ export class AuthController {
     @Body(ValidationPipe) user: CreateUserDto,
     @Res({ passthrough: true }) res: Response,
   ) {
+    user.email = user.email.toLowerCase();
     const createdUser: ResponseUserDto = await this.authService.register(user);
     res.cookie('jwt', createdUser.token);
 
@@ -54,6 +55,7 @@ export class AuthController {
     @Body(ValidationPipe) user: LoginUserDto,
     @Res({ passthrough: true }) res: Response,
   ) {
+    user.email = user.email.toLowerCase();
     const validateUser: ResponseUserDto = await this.authService.login(user);
     res.cookie('jwt', validateUser.token);
     return {
