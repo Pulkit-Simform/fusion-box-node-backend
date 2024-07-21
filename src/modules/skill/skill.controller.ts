@@ -6,8 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  HttpStatus,
-  HttpCode,
   NotFoundException,
   ValidationPipe,
   UseGuards,
@@ -19,9 +17,13 @@ import { Public } from 'src/core/decorators/public.decorator';
 import { CurrentUser } from 'src/core/decorators/user.decorator';
 import { User } from 'src/database/entities';
 import { ClientAuthGuard } from 'src/core/guards/auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Tags } from 'src/common/constant';
 
+@ApiTags(Tags.SKILL)
 @Controller('skill')
 @UseGuards(ClientAuthGuard)
+@ApiBearerAuth()
 export class SkillController {
   constructor(private readonly skillService: SkillService) {}
 
@@ -40,7 +42,6 @@ export class SkillController {
   }
 
   @Get()
-  @HttpCode(HttpStatus.OK)
   async findAll(@CurrentUser() user: User) {
     const skills = await this.skillService.findAll(user);
     return {

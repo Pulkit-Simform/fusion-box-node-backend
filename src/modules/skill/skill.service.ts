@@ -13,11 +13,11 @@ export class SkillService {
       ...createSkillDto,
       user,
     });
-    return this.skillRepo.save(skill);
+    return await this.skillRepo.save(skill);
   }
 
-  findAll(user: User) {
-    return this.skillRepo.find({
+  async findAll(user: User) {
+    return await this.skillRepo.find({
       where: {
         user: {
           id: user.id,
@@ -26,10 +26,8 @@ export class SkillService {
     });
   }
 
-  findOne(id: number) {
-    return this.skillRepo.findOneBy({
-      id,
-    });
+  async findOne(id: number) {
+    return await this.skillRepo.findOneBy({ id });
   }
 
   async update(id: number, updateSkillDto: UpdateSkillDto) {
@@ -41,7 +39,7 @@ export class SkillService {
     return this.skillRepo.save(skill);
   }
 
-  remove(id: number) {
-    return this.skillRepo.delete(id);
+  async remove(id: number) {
+    return await this.skillRepo.delete(id);
   }
 }
