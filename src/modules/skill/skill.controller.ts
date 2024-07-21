@@ -15,7 +15,7 @@ import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { Public } from 'src/core/decorators/public.decorator';
 import { CurrentUser } from 'src/core/decorators/user.decorator';
-import { User } from 'src/database/entities';
+import { EType, User } from 'src/database/entities';
 import { ClientAuthGuard } from 'src/core/guards/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Tags } from 'src/common/constant';
@@ -33,6 +33,7 @@ export class SkillController {
     @Body(ValidationPipe) createSkillDto: CreateSkillDto,
     @CurrentUser() user: User,
   ) {
+    createSkillDto.stype = EType.SECONDARY;
     const skill = await this.skillService.create(createSkillDto, user);
     return {
       message: message.SKILL.SUCCESS.CREATED,

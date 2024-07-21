@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { ELevel, EStatus } from 'src/database/entities';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ELevel, EStatus, EType } from 'src/database/entities';
 
 export class CreateSkillDto {
   @ApiProperty({
@@ -30,4 +30,11 @@ export class CreateSkillDto {
   @IsEnum(EStatus)
   @IsNotEmpty()
   status: EStatus;
+
+  @ApiProperty({
+    type: String
+  })
+  @IsEnum(EType)
+  @IsOptional()
+  stype: EType;
 }
