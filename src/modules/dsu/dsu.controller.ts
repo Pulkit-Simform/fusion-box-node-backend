@@ -16,9 +16,12 @@ import { UpdateDsuDto } from './dto/update-dsu.dto';
 import { ClientAuthGuard } from 'src/core/guards/auth.guard';
 import { CurrentUser } from 'src/core/decorators/user.decorator';
 import { User } from 'src/database/entities';
-import { ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Tags } from 'src/common/constant';
 
+@ApiTags(Tags.DSU)
 @Controller('dsu')
+@ApiBearerAuth()
 @UseGuards(ClientAuthGuard)
 export class DsuController {
   constructor(private readonly dsuService: DsuService) {}

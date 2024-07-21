@@ -15,8 +15,12 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { ClientAuthGuard } from 'src/core/guards/auth.guard';
 import { CurrentUser } from 'src/core/decorators/user.decorator';
 import { User } from 'src/database/entities';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Tags } from 'src/common/constant';
 
+@ApiTags(Tags.PROJECT)
 @Controller('project')
+@ApiBearerAuth()
 @UseGuards(ClientAuthGuard)
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}

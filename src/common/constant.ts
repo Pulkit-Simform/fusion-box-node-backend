@@ -1,9 +1,15 @@
 import { ELevel, EStatus, EType } from 'src/database/entities';
 
-export const Tags = {
-  HEALTH: 'Health',
-  COMMON: 'Common',
-};
+export enum Tags {
+  HEALTH = 'Health',
+  COMMON = 'Common',
+  USER = 'User',
+  SKILL = 'Skill',
+  PROJECT = 'Project',
+  EVENT = 'Event',
+  DSU = 'DSU',
+  CHAT = 'Chat',
+}
 
 export enum NodeEnv {
   LOCAL = 'local',

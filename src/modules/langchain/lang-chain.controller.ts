@@ -24,9 +24,11 @@ import {
 import { ClientAuthGuard } from 'src/core/guards/auth.guard';
 import { CurrentUser } from 'src/core/decorators/user.decorator';
 import { User } from 'src/database/entities';
+import { Tags } from 'src/common/constant';
 
+@ApiBearerAuth()
+@ApiTags(Tags.CHAT)
 @UseGuards(ClientAuthGuard)
-@ApiTags('chat')
 @Controller('chat')
 export class LangChainController {
   constructor(private readonly langChainService: LangChainService) {}
@@ -36,7 +38,6 @@ export class LangChainController {
     summary: 'This api is return searched data from stored vectors.',
   })
   @ApiOkResponse({ description: '`Ok`' })
-  @ApiBearerAuth()
   async chat(@CurrentUser() user: User, @Query() query: AskPolicyReqDTO) {
     const data = await this.langChainService.chat(query.input, user);
 
@@ -74,7 +75,6 @@ export class LangChainController {
     summary: 'This api is updates the chat history.',
   })
   @ApiOkResponse({ description: '`Updated.`' })
-  @ApiBearerAuth()
   async updateChatHistory(
     @CurrentUser() user: User,
     @Body() query: PutChatHistoryReqDTO,
